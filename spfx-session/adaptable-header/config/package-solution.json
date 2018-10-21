@@ -1,0 +1,12 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "adaptable-header-client-side-solution",
+    "id": "2d9da520-4741-4649-a232-f5270a6a8e17",
+    "version": "1.0.0.0",
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/adaptable-header.sppkg"
+  }
+}

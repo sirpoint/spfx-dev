@@ -1,0 +1,12 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "expenses-form-client-side-solution",
+    "id": "1a58925d-94c7-4be8-b1d3-49ad8c9765fb",
+    "version": "1.0.0.0",
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/expenses-form.sppkg"
+  }
+}
