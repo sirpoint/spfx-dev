@@ -1,8 +1,9 @@
 import { SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions } from '@microsoft/sp-http';
-import { Environment, EnvironmentType } from '@microsoft/sp-core-library';
-import pnp from 'sp-pnp-js';
 import { IHttpConfiguration } from './DataServiceInterfaces';
 import { NavigationItem, PageHeaderConfig } from '../common/CommonInterfaces';
+import { StringConstants } from '../common/StringConstants';
+import { setup as pnpSetup } from '@pnp/common';
+import { sp, StorageEntity } from '@pnp/sp';
 
 export class DataService{
     private spHttpClient: SPHttpClient;
@@ -15,22 +16,28 @@ export class DataService{
         this.siteAbsoluteUrl = config.siteAbsoluteUrl;
         this.context = config.context;
 
-        pnp.setup({
+        pnpSetup({
             spfxContext: this.context,
+        });
+
+        sp.setup({
+            spfxContext: this.context
         });
     }
 
     public async getNavigation(propertyName: string):Promise<NavigationItem[]>{
-        const jsonTenantProperty:string = await pnp.sp.web.getStorageEntity(propertyName);
-        let globalNavigation:NavigationItem[] = JSON.parse(jsonTenantProperty);
+        const jsonTenantProperty:StorageEntity = await sp.web.getStorageEntity(propertyName);
+        let globalNavigation:NavigationItem[] = JSON.parse(jsonTenantProperty.Value);
 
         return globalNavigation;
     }
 
-    public async getHeaderConfiguration(headerConf: string): Promise<PageHeaderConfig[]> {
-        const jsonTenantProperty:string = await pnp.sp.web.getStorageEntity(headerConf);
-        let pagetHeaderConf: PageHeaderConfig[] = JSON.parse(jsonTenantProperty);
+    public async getHeaderConfiguration(pageName: string): Promise<PageHeaderConfig> {
+        const jsonTenantProperty:StorageEntity = await sp.web.getStorageEntity(StringConstants.PagesHeaderConfigurationKey);
+        const pagetHeaderConfArray: PageHeaderConfig[] = JSON.parse(jsonTenantProperty.Value);
 
-        return pagetHeaderConf;
+        const pageHeaderConf: PageHeaderConfig[] = pagetHeaderConfArray.filter(pageConf => pageConf.pageName === pageName);
+
+        return pageHeaderConf[0];
     }
 }

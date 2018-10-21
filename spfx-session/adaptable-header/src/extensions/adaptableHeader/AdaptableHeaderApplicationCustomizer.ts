@@ -13,37 +13,25 @@ import { Dialog } from '@microsoft/sp-dialog';
 import * as strings from 'AdaptableHeaderApplicationCustomizerStrings';
 import { AdaptableTopAreaProps } from './components/AdaptableTopAreaProps';
 import AdaptableTopArea from './components/AdaptableTopArea';
+import { DataService } from './services/DataService';
+import { NavigationItem } from './common/CommonInterfaces';
+import { PageHeaderConfig } from '../../../lib/extensions/adaptableHeader/common/CommonInterfaces';
+import { StringConstants } from './common/StringConstants';
+import { ComponentsToShow } from './common/enums';
 
 const LOG_SOURCE: string = 'AdaptableHeaderApplicationCustomizer';
 
-/**
- * If your command set uses the ClientSideComponentProperties JSON input,
- * it will be deserialized into the BaseExtension.properties object.
- * You can define an interface to describe it.
- */
+
 export interface IAdaptableHeaderApplicationCustomizerProperties {
-  // This is an example; replace with your own property
   testMessage: string;
 }
 
-/** A Custom Action which can be run during execution of a Client Side Application */
 export default class AdaptableHeaderApplicationCustomizer
   extends BaseApplicationCustomizer<IAdaptableHeaderApplicationCustomizerProperties> {
   private _topPlaceHolder: PlaceholderContent | undefined;
 
   @override
   public onInit(): Promise<void> {
-    // Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
-
-    // let message: string = this.properties.testMessage;
-    // if (!message) {
-    //   message = '(No properties were provided.)';
-    // }
-
-    // Dialog.alert(`Hello from ${strings.Title}:\n\n${message}`);
-
-    // pages-header-configuration
-
     this.context.placeholderProvider.changedEvent.add(this, this._renderTopPlaceHolder);
     this._renderTopPlaceHolder();
 
@@ -51,9 +39,9 @@ export default class AdaptableHeaderApplicationCustomizer
   }
 
   private async _renderTopPlaceHolder() {
-    console.log("AdaptableHeaderApplicationCustomizer.__renderTopPlaceHolder()");
+    console.log(StringConstants.LogMessages.RenderMethod);
     console.log(
-      "Available placeholders: ",
+      StringConstants.LogMessages.AvailabblePlaceholders,
       this.context.placeholderProvider.placeholderNames
         .map(name => PlaceholderName[name])
         .join(", ")
@@ -66,16 +54,38 @@ export default class AdaptableHeaderApplicationCustomizer
           { onDispose: this._onDispose }
       );
       if (!this._topPlaceHolder) {
-        Log.error('Init', new Error('The expected placeholder (Top) was not found'), this.context.serviceScope);
+        Log.error(StringConstants.LogMessages.TopAreaSource, new Error(StringConstants.LogMessages.TopAreaNotFound), this.context.serviceScope);
       }
+
+      const pageUrl: string = this.context.pageContext.web.absoluteUrl;
+      const urlArray:string[] = this.context.pageContext.site.serverRequestPath.split("/");
+      const pageName: string = urlArray[urlArray.length-1];
+
+      let dataService:DataService = new DataService({
+        spHttpClient: this.context.spHttpClient,
+        siteAbsoluteUrl: pageUrl,
+        context: this.context,
+      });
+      
+      const pageHeaderConfig: PageHeaderConfig = await dataService.getHeaderConfiguration(pageName);
+      const globalNavigation:NavigationItem[] = await dataService.getNavigation(StringConstants.GlobalNavigationKey);
+      
+      const isShortcutsIncluded = pageHeaderConfig.componentsToShow.filter(componentsToShow => ComponentsToShow.Shortcuts).length > 0;
+      const isAdaptableSearchBoxIncluded = pageHeaderConfig.componentsToShow.filter(componentsToShow => ComponentsToShow.Shortcuts).length > 0;
+
+      let shortcutItems: NavigationItem[];
+      if (isShortcutsIncluded)
+            shortcutItems = await dataService.getNavigation(StringConstants.ShortcutsNavigationKey);
+
+      // if (isAdaptableSearchBoxIncluded)
 
       const adaptableTopArea: React.ReactElement<AdaptableTopAreaProps> = React.createElement(
         AdaptableTopArea,
         {
           title: '',
-          globalNavigationItems: null,
-          shortcutItems: null,
-          pageHeaderConfig: null,
+          globalNavigationItems: globalNavigation,
+          shortcutItems: shortcutItems,
+          pageHeaderConfig: pageHeaderConfig,
           currentUrl: this.context.pageContext.site.absoluteUrl,
         }
       );
@@ -85,6 +95,6 @@ export default class AdaptableHeaderApplicationCustomizer
   }
 
   private _onDispose(): void{
-    console.log('[AdaptableHeaderApplicationCustomizer._onDispose] Disposed custom top placeholder');
+    console.log(StringConstants.LogMessages.OnDisposeMethod);
   }  
 }

@@ -24,3 +24,6 @@ gulp test - TODO
 gulp serve - TODO
 gulp bundle - TODO
 gulp package-solution - TODO
+
+we should be carefull with pnpjs version, latest: 1.2.3 didn't work for me
+ 

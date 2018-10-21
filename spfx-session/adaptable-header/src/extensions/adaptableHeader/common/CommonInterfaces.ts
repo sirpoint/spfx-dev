@@ -6,6 +6,7 @@ export interface NavigationItem{
 }
 
 export interface PageHeaderConfig{
+    id: number;
     pageName:string;
     componentsToShow: string[];
     styleInjection: boolean;

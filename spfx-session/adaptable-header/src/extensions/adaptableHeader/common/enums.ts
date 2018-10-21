@@ -1,5 +1,5 @@
 export enum ComponentsToShow{
-    GlobalNavigation = "GlobalNavigation",
-    QuickLinks = "QuickLinks",
-    CustomSearchBox = "QuickLinks",
+    GlobalNavigation = "globalNavigation",
+    Shortcuts = "shortcuts",
+    AdaptableSearchBox = "adaptableSearchBox",
 }
