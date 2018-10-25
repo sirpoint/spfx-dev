@@ -17,7 +17,10 @@ export const StringConstants = {
         "OnDisposeMethod": "[AdaptableHeaderApplicationCustomizer._onDispose] Disposed custom top placeholder",
     },
     "Styles":{
-        "HideSuiteBar" : "#SuiteNavPlaceHolder{display:none !important;"
+        "HideSuiteBar" : "#SuiteNavPlaceHolder{display:none !important;}"
+    },
+    "targets" :{
+        "blank": "_blank",
     },
     "PagesHeaderConfigurationKey": "pages-header-configuration",
     "GlobalNavigationKey": "global-navigation",

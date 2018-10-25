@@ -1,0 +1,13 @@
+Use Brand Icons from Office UI fabric
+
+UL for Shortcuts
+    /* display: inline-block; */
+    text-align: right;
+    width: 100%;
+    /* margin-left: 38%; */
+    margin-top: 0px;
+
+LI for Shortcuts
+display: inline-block;
+
+Remember customize Searchbox

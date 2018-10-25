@@ -16,9 +16,6 @@ export default class AdaptableTopArea extends React.Component<AdaptableTopAreaPr
     public render(): React.ReactElement<AdaptableTopAreaProps>{
         return(
             <div>
-                <style id="hideSuiteBar">
-                    {StringConstants.Styles.HideSuiteBar}
-                </style>
                 {this.props.pageHeaderConfig.styleInjection &&
                     <style >
                         {this.props.pageHeaderConfig.stylesToInject}

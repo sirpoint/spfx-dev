@@ -10,27 +10,11 @@ export class GlobalNavigation extends React.Component<GlobalNavigationProps>{
         super(props);
     }
     
-    private onIconSuiteBar = (event: any): any => {
-        let suiteBar = document.getElementById("hideSuiteBar");
-        let iconHideShowSuiteBar = document.getElementById("showHideSuiteBar");
-        if (suiteBar){
-            if (suiteBar.innerHTML === ""){
-                suiteBar.innerHTML = StringConstants.Styles.HideSuiteBar;
-                iconHideShowSuiteBar.setAttribute("class",`ms-Icon ms-Icon--RedEye x-hidden-focus ${styles.toolBarItem}`);
-                iconHideShowSuiteBar.title = "Show Office 365 Bar";
-            }else{
-                suiteBar.innerHTML = StringConstants.Empty;
-                iconHideShowSuiteBar.setAttribute("class",`ms-Icon ms-Icon--Hide x-hidden-focus ${styles.toolBarItem}`);
-                iconHideShowSuiteBar.title = "Hide Office 365 Bar";
-            }
-        }
-    }
-
     public render(){
         return(
             <div className={styles.divContainer}>
                 <div className={styles.marginDiv}>
-                    &#9776;
+                    <span className= {`ms-Icon ms-Icon--Family ${styles.menuIcon}`} title="Family site"></span>
                 </div>
                 <ul className={styles.navigationBar}>
                     {this.props.globalNavigationItems.map((i)=>{
@@ -48,15 +32,6 @@ export class GlobalNavigation extends React.Component<GlobalNavigationProps>{
                             );
                         }
                     })}
-                </ul>
-                <ul className={styles.toolBar}>
-                    <li className={styles.toolBarItem}>
-                        <a className={`ms-Icon ms-Icon--RedEye x-hidden-focus ${styles.toolBarItem}`}
-                        onClick ={this.onIconSuiteBar}
-                        title = "Show Office 365 Bar"
-                        id="showHideSuiteBar"
-                        ></a>
-                    </li>
                 </ul>
             </div>        
         );
